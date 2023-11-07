@@ -1136,8 +1136,13 @@ abstract class AbstractModel implements ArrayAccess, JsonSerializable
         $this->fields = $fields;
         $this->limit = 1;
         $res = $this->all();
-        if (isset($res[0]->$fields)) {
+
+        if (is_object($res[0]) && isset($res[0]->$fields)) {
             return $res[0]->$fields;
+        }
+
+        if (is_array($res[0]) && isset($res[0][$fields])) {
+            return $res[0][$fields];
         }
 
         return null;
